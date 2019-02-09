@@ -1,0 +1,47 @@
+import subprocess
+from io import StringIO
+
+tests = [
+"python3 pacman.py -l openMaze -p SearchAgent -a fn=dfs --frameTime 0",
+"python3 pacman.py -l openMaze -p SearchAgent -a fn=bfs --frameTime 0",
+"python3 pacman.py -l openMaze -p SearchAgent -a fn=astar,heuristic=manhattanHeuristic --frameTime 0",
+"python3 pacman.py -l tinyMaze -p SearchAgent -a fn=dfs --frameTime 0",
+"python3 pacman.py -l tinyMaze -p SearchAgent -a fn=bfs --frameTime 0",
+"python3 pacman.py -l tinyMaze -p SearchAgent -a fn=astar,heuristic=manhattanHeuristic --frameTime 0",
+"python3 pacman.py -l mediumMaze -p SearchAgent -a fn=dfs --frameTime 0",
+"python3 pacman.py -l mediumMaze -p SearchAgent -a fn=bfs --frameTime 0",
+"python3 pacman.py -l mediumMaze -p SearchAgent -a fn=astar,heuristic=manhattanHeuristic --frameTime 0",
+"python3 pacman.py -l bigMaze -z .5 -p SearchAgent -a fn=dfs --frameTime 0",
+"python3 pacman.py -l bigMaze -z .5 -p SearchAgent -a fn=bfs --frameTime 0",
+"python3 pacman.py -l bigMaze -z .5 -p SearchAgent -a fn=astar,heuristic=manhattanHeuristic --frameTime 0",
+"python3 pacman.py -l tinyCorners -p SearchAgent -a fn=dfs,prob=CornersProblem --frameTime 0",
+"python3 pacman.py -l tinyCorners -p SearchAgent -a fn=bfs,prob=CornersProblem --frameTime 0",
+"python3 pacman.py -l tinyCorners -p SearchAgent -a fn=aStarSearch,prob=CornersProblem,heuristic=cornersHeuristic --frameTime 0",
+"python3 pacman.py -l mediumCorners -p SearchAgent -a fn=dfs,prob=CornersProblem --frameTime 0",
+"python3 pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem --frameTime 0",
+"python3 pacman.py -l mediumCorners -p SearchAgent -a fn=aStarSearch,prob=CornersProblem,heuristic=cornersHeuristic --frameTime 0",
+"python3 pacman.py -l bigCorners -p SearchAgent -a fn=dfs,prob=CornersProblem -z 0.5 --frameTime 0",
+"python3 pacman.py -l bigCorners -p SearchAgent -a fn=bfs,prob=CornersProblem -z 0.5 --frameTime 0",
+"python3 pacman.py -l bigCorners -p SearchAgent -a fn=aStarSearch,prob=CornersProblem,heuristic=cornersHeuristic -z 0.5 --frameTime 0"]
+#Edit: Fixed correction from Mircea "0]"
+
+for x in tests:
+	result = subprocess.run((x).split(), stdout=subprocess.PIPE)
+	res = result.stdout.decode('utf-8')
+	print ('Starting test:', x,'\n')
+	if 'Win' in res:
+		stri = StringIO(res)
+		while True:
+			line = stri.readline()
+			if 'Path found with total cost' in line:
+				print (line)
+			if 'Search nodes expanded:' in line:
+				print (line)
+			if 'Scores:' in line:
+				print (line)
+			if 'Win' in line:
+				print (line)
+				break
+		print ('Success')
+	else:
+		print ('Failed')
